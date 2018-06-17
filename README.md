@@ -6,7 +6,7 @@ Compatible with Python 2.7 and Python 3+.
 
 Just populate an input file, called `input.txt`, where each line is semi-colon-separated and contains the name of the Amazon Transcribe output JSON file, and a comma-separated, ordered list of speakers.
 
-For example, the following `input.txt file will result in the iterative processing of files `episode_1.json`, `episode_2.json` and `episode_3.json`. `speaker_1`, `speaker_2` and `speaker_3` will replace the automatically generated placeholders `spk_0`, `spk_1` and `spk_2`.
+For example, the following `input.txt` file will result in the iterative processing of files `episode_1.json`, `episode_2.json` and `episode_3.json`. `speaker_1`, `speaker_2` and `speaker_3` will replace the automatically generated placeholders `spk_0`, `spk_1` and `spk_2`.
 The output HTML files will be named after the `jobName` from each input JSON file.
 
 ```
