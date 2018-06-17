@@ -1,5 +1,6 @@
-# aws-transcription-parser
-An automatic parser of Amazon Transcribe jobs - of podcast episodes - which outputs to HTML.
+# Amazon Transcribe job parser which outputs formatted HTML
+
+This is an automatic parser of Amazon Transcribe jobs - of podcast episodes - which outputs to HTML.
 
 Compatible with Python 2.7 and Python 3+.
 
