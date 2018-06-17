@@ -36,7 +36,8 @@ def append_token(html, line):
         token = line['alternatives'][0]['content']
     else:
         token = sorted(line['alternatives'],
-                       key=lambda _: float(itemgetter('confidence')(_)))[0]
+                       key=lambda _: float(itemgetter('confidence')(_)),
+                       reverse=True)[0]
 
     html.append(" {}".format(token))
 
