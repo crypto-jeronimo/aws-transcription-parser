@@ -14,6 +14,14 @@ episode_2.json;speaker_2,speakder_3
 episode_3.json;speaker_1,speaker_2,speakder_3
 ```
 
+Once you've created your `input.txt` file and moved it in the same directory as the `process_aws_output.py` file, you simply need to run the script with Python:
+```
+$ python process_aws_output.py
+SUCCESS!
+```
+
+A `SUCCESS!` message is expected, signifying that all HTML outputs have been stored in the same directory.
+
 Please, don't hesitate to ask questions or request changes or improvements via the [Issues](https://github.com/crypto-jeronimo/aws-transcription-parser/issues) section.
 
 
