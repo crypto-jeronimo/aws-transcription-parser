@@ -1,4 +1,4 @@
-# Amazon Transcribe job parser which outputs formatted HTML
+# Automated parsing of Amazon-Transcribe-annotated episode transcripts
 
 This is an automatic parser of Amazon Transcribe jobs - of podcast episodes - which outputs to HTML.
 
