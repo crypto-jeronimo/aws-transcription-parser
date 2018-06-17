@@ -11,8 +11,8 @@ The output HTML files will be named after the `jobName` from each input JSON fil
 
 ```
 episode_1.json;speaker_1,speaker_2
-episode_2.json;speaker_2,speakder_3
-episode_3.json;speaker_1,speaker_2,speakder_3
+episode_2.json;speaker_2,speaker_3
+episode_3.json;speaker_1,speaker_2,speaker_3
 ```
 
 Once you've created your `input.txt` file and moved it in the same directory as the `process_aws_output.py` file, you simply need to run the script with Python:
