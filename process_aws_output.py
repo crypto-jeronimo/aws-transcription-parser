@@ -28,10 +28,11 @@ def get_end_times(speaker_label_items):
 
 
 def update_speaker(html, speaker_name, speaker_map=()):
-    html.append('<p><b>{}: </b></p><p>'.format(speaker_map[int(speaker_name[-1])]))
-    return speaker_name
+    speaker = speaker_map[int(speaker_name[-1])]
+    html = append(html, '<p><b>{}: </b></p><p>'.format(speaker))
+    return html, speaker_name
 
-def append_token(html, line):
+def append_token(html, line, separator=' '):
     if len(line['alternatives']) == 1:
         token = line['alternatives'][0]['content']
     else:
@@ -39,30 +40,50 @@ def append_token(html, line):
                        key=lambda _: float(itemgetter('confidence')(_)),
                        reverse=True)[0]
 
-    html.append(" {}".format(token))
+    html = append(html, token, separator=separator)
+    return html
 
 def build_html(lines, end_times, job_name, speaker_map):
     _update_speaker = partial(update_speaker, speaker_map=speaker_map)
-    html = deque(['<html><head><title>{}</title></head><body>'.format(job_name)])
+    html = '<html><head><title>{}</title></head><body>'.format(job_name)
 
     current_speaker = None
     speaker_changes = 0
+    punctuation = ''
+    i = -1
+    num_lines = len(lines)
 
-    for line in lines:
-        end_time, range_speaker = end_times[speaker_changes]
+    while i < num_lines - 1:
+        i += 1
+        line = lines[i]
 
-        if float(line['end_time']) < float(end_time):
-            if current_speaker is None:
-                current_speaker = _update_speaker(html, range_speaker)
+        if line['type'] == 'punctuation':
+            try:
+                punctuation = append(punctuation, line['alternatives'][0]['content'], separator='', postfix=' ')
+            except (KeyError, IndexError):
+                pass
+            continue
 
-        else:
-            speaker_changes += 1
-            current_speaker = _update_speaker(html, range_speaker)
+        try:
+            end_time, range_speaker = end_times[speaker_changes]
+        except IndexError:
+            break
 
-        append_token(html, line)
+        if punctuation:
+            html = append(html, punctuation, separator='')
+            punctuation = ''
 
-    html.append('</p></body></html>')
-    return "{}\n".format('\n'.join(html))
+            if float(line['end_time']) < float(end_time):
+                if current_speaker is None:
+                    html, current_speaker = _update_speaker(html, range_speaker)
+            elif lines[i-1]['type'] == 'punctuation' and lines[i-1]['alternatives'][0]['content'] in '.!?':
+                speaker_changes += 1
+                html, current_speaker = _update_speaker(html, range_speaker)
+
+        html = append_token(html, line)
+
+    html = append(html, '</p></body></html>')
+    return html
 
 def write_to_file(html, fname):
     with open('{}.html'.format(fname), 'wt') as f:
@@ -75,6 +96,9 @@ def parse_raw_transcription(fname, speaker_names):
     html = build_html(lines, end_times, job_name, speaker_names)
     write_to_file(html, job_name)
 
+def append(html, text, separator='\n', postfix=''):
+    return '{}{}{}{}'.format(html, separator, text, postfix)
+
 def run(fname):
     with open(fname, 'rt') as f:
         for line in f:
@@ -82,7 +106,6 @@ def run(fname):
 
             fname = line.pop(0)
             speakers = line.pop().split(',')
-
             parse_raw_transcription(fname, speakers)
 
     print("SUCCESS!")
